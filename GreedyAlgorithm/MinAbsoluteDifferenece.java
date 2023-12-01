@@ -1,5 +1,5 @@
 import java.util.*;
-public class MinAbsoluteDiffernece {
+public class MinAbsoluteDifferenece {
     public static void main(String[] args) {
         // System.out.println("hello");
         int nums1[] = {4, 1, 8, 7};

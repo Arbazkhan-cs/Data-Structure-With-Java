@@ -1,6 +1,6 @@
 import java.util.*;
 import java.util.LinkedList;
-public class BuildPreorder {
+public class basics {
     static class Node{
         int data;
         Node leftChild;
@@ -101,6 +101,18 @@ public class BuildPreorder {
             int rightSum = sumOfNodes(root.rightChild);
             return leftSum + rightSum + root.data;
         }
+        public static int calculateDiameter(Node root){ // O(n^2)
+            if(root == null){
+                return 0;
+            }
+            int leftDiameter = calculateDiameter(root.leftChild);
+            int leftHeight = heightOfTree(root.leftChild);
+            int rightDiameter= calculateDiameter(root.rightChild);
+            int rightHeight = heightOfTree(root.rightChild);
+
+            int selfDiameter = leftHeight + rightHeight + 1;
+            return Integer.max(Integer.max(leftDiameter, rightDiameter), selfDiameter);
+        }
     }
 
     public static void main(String args[]){
@@ -122,5 +134,7 @@ public class BuildPreorder {
         System.out.println("Hight of the tree = "+tree.heightOfTree(root));
         System.out.println("Number of Nodes in tree = "+tree.NumberOfNodes(root));
         System.out.println("Sum of Nodes in tree = "+tree.sumOfNodes(root));
+
+        System.out.println("Diameter [Longest Number of nodes between 2 leaf] = "+tree.calculateDiameter(root));
     }
 }

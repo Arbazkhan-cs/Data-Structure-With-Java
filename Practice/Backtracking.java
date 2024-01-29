@@ -156,6 +156,44 @@ class Backtracking{
         }
         System.out.println();
     }  
+    // ============================================= Maze Problem ===============================
+    public static boolean isSafeMaze(int[][] maze,int i,int j){
+        return (i >= 0 && j >= 0 && i < maze.length && j < maze[0].length && maze[i][j] == 1);
+    }
+    public static boolean solveMaze(int[][] maze) {
+        int N = maze.length;
+        int[][] sol = new int[N][N];
+        if(solveMazeHelp(maze, 0, 0, sol) == false){
+            System.err.println("Solution Does Not Exist!!!");
+            return false;
+        }
+        printChess(sol);
+        return true;
+    }
+    public static boolean solveMazeHelp(int[][] maze, int i, int j, int[][] sol){
+        if(i == maze.length-1 && j == maze[0].length-1 && maze[i][j] == 1){
+            sol[i][j] = 1;
+            return true;
+        }
+
+        if(isSafeMaze(maze, i, j) == true){
+            if(sol[i][j] == 1){
+                return false;
+            }
+            sol[i][j] = 1;
+            if(solveMazeHelp(maze, i+1, j, sol)){ // Up and Down
+                return true;
+            }
+            if(solveMazeHelp(maze, i, j+1, sol)){ // Left and right
+                return true;
+            }
+            sol[i][j] = 0;
+            return false;
+        }
+        return false;
+    }
+        
+    
     public static void main(String[] args) {
         // System.err.println("Hello World");
         // PrintSubSets("abc", 0, "");
@@ -174,22 +212,30 @@ class Backtracking{
         // int m = 3, n = 3;
         // System.err.println(gridWays(0, 0, m, n));
 
-        int[][] board = {
-            {0, 0, 8, 0, 0, 0, 0, 0, 0},
-            {4, 9, 0, 1, 5, 7, 0, 0, 2},
-            {0, 0, 3, 0, 0, 4, 1, 9, 0},
-            {1, 8, 5, 0, 6, 0, 0, 2, 0},
-            {0, 0, 0, 0, 2, 0, 0, 6, 0},
-            {9, 6, 0, 4, 0, 5, 3, 0, 0},
-            {0, 3, 0, 0, 7, 2, 0, 0, 4},
-            {0, 4, 9, 0, 3, 0, 0, 5, 7},
-            {8, 2, 7, 0, 0, 9, 0, 1, 3}
-        };
+        // int[][] board = {
+        //     {0, 0, 8, 0, 0, 0, 0, 0, 0},
+        //     {4, 9, 0, 1, 5, 7, 0, 0, 2},
+        //     {0, 0, 3, 0, 0, 4, 1, 9, 0},
+        //     {1, 8, 5, 0, 6, 0, 0, 2, 0},
+        //     {0, 0, 0, 0, 2, 0, 0, 6, 0},
+        //     {9, 6, 0, 4, 0, 5, 3, 0, 0},
+        //     {0, 3, 0, 0, 7, 2, 0, 0, 4},
+        //     {0, 4, 9, 0, 3, 0, 0, 5, 7},
+        //     {8, 2, 7, 0, 0, 9, 0, 1, 3}
+        // };
 
-        if(sudokuSolver(board, 0, 0)){
-            printSudoku(board);
-        } else{
-            System.err.println("Cannot Solve");
-        }
+        // if(sudokuSolver(board, 0, 0)){
+        //     printSudoku(board);
+        // } else{
+        //     System.err.println("Cannot Solve");
+        // }
+
+        int[][] maze = {
+            { 1, 0, 0, 0 },
+            { 1, 1, 0, 1 },
+            { 0, 1, 0, 0 },
+            { 1, 1, 1, 1 }
+        };
+        solveMaze(maze);
     }
 }

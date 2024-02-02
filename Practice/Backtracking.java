@@ -192,6 +192,23 @@ class Backtracking{
         }
         return false;
     }
+    // =============================== keyword combination =========================================
+    public static void letterCombination(String st, String[] keywords, String res) {
+        if (res.length() >= st.length()) {
+            System.out.print(res + " ");
+            return;
+        }
+
+        int index = res.length();
+        char ch = st.charAt(index);
+        String s = keywords[ch - '0']; // Assuming keywords is an array of strings
+        for (char c : s.toCharArray()) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(res).append(c);
+            letterCombination(st, keywords, sb.toString());
+        }
+    }
+
         
     
     public static void main(String[] args) {
@@ -230,12 +247,16 @@ class Backtracking{
         //     System.err.println("Cannot Solve");
         // }
 
-        int[][] maze = {
-            { 1, 0, 0, 0 },
-            { 1, 1, 0, 1 },
-            { 0, 1, 0, 0 },
-            { 1, 1, 1, 1 }
-        };
-        solveMaze(maze);
+        // int[][] maze = {
+        //     { 1, 0, 0, 0 },
+        //     { 1, 1, 0, 1 },
+        //     { 0, 1, 0, 0 },
+        //     { 1, 1, 1, 1 }
+        // };
+        // solveMaze(maze);
+
+        String[] keyword = {"oper", "@", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        String num = "13";
+        letterCombination(num, keyword, "");
     }
 }

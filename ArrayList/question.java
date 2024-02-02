@@ -1,6 +1,6 @@
 import java.util.*;
 public class question {
-    public static int ContainerWithMostWater(ArrayList<Integer> container, int left, int right){
+    public static int ContainerWithMostWater(Arraylist<Integer> container, int left, int right){
         int mostWater = Integer.MIN_VALUE;
         while(left<right){
             int width = right - left;
@@ -21,7 +21,7 @@ public class question {
     }
     public static void main(String args[]){
         // container with most water
-        ArrayList<Integer> container = new ArrayList<>();
+        Arraylist<Integer> container = new Arraylist<>();
         container.add(1);
         container.add(8);
         container.add(6);

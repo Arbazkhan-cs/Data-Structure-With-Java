@@ -14,7 +14,7 @@ public class JobSequences {
     public static void main(String[] args) {
         int jobInfo[][] = {{4, 20}, {1, 10}, {1, 40}, {1, 30}};
 
-        ArrayList<Job> jobs = new ArrayList<>();
+        Arraylist<Job> jobs = new Arraylist<>();
         for (int i=0 ;i <jobInfo.length;i++){
             jobs.add(new Job(jobInfo[i][0], jobInfo[i][1], i));
         }
@@ -22,7 +22,7 @@ public class JobSequences {
         // descending according to the profit
         Collections.sort(jobs, (obj1,obj2) -> obj2.profit - obj1.profit);
 
-        ArrayList<Integer> seq = new ArrayList<>();
+        Arraylist<Integer> seq = new Arraylist<>();
         int time = 0;
         for(int i = 0; i<jobs.size(); i++){
             Job currJob = jobs.get(i);

@@ -206,6 +206,48 @@ public class Stack_ {
 
         return false; // No duplicate parentheses found
     } 
+
+    public static int maxAriaInHistogram(int[] arr){
+        Stack<Integer> st = new Stack<>();
+        int[] nsr = new int[arr.length];
+        int[] nsl = new int[arr.length];
+        for(int i = arr.length-1; i>=0; i--){
+            while(!st.isEmpty() && arr[st.peek()] >= arr[i]){
+                st.pop();
+            }
+            if(st.isEmpty()){
+                nsr[i] = arr.length;
+            } else{
+                nsr[i] = st.peek();
+            }
+            st.push(i);
+        }
+
+        st = new Stack<Integer>();
+        for(int i = 0; i<arr.length; i++){
+            while(!st.isEmpty() && arr[st.peek()] >= arr[i]){
+                st.pop();
+            }
+            if(st.isEmpty()){
+                nsl[i] = -1;
+            } else{
+                nsl[i] = st.peek();
+            }
+            st.push(i);
+        }
+
+        int maxArea = 0;
+        // Maximum Area
+        for(int i = 0; i< arr.length; i++){
+            int height = arr[i];
+            int width = nsr[i] - nsl[i] - 1;
+            int currArea = height * width;
+            maxArea = Math.max(maxArea, currArea);
+        }
+            
+
+        return maxArea;
+    }
     
     public static void main(String[] args) {
         // StackByArrayList st = new StackByArrayList();
@@ -283,8 +325,12 @@ public class Stack_ {
         // System.out.print(res);
 
 
-        String exp = "((a+b)+(c+d))";
-        boolean res = hasDuplicateParentheses(exp);
-        System.err.println(res);
+        // String exp = "((a+b)+(c+d))";
+        // boolean res = hasDuplicateParentheses(exp);
+        // System.err.println(res);
+
+
+        int[] height = {2, 1, 5, 6, 2, 3};
+        System.err.println(maxAriaInHistogram(height));
     }
 }

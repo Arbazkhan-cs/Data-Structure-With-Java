@@ -139,6 +139,74 @@ public class Stack_ {
         }
         System.err.println();
     }
+
+    public static int[] NextGreaterElement(int[] arr){
+        Stack<Integer> st = new Stack<>();
+        int[] res = new int[arr.length];
+
+        for(int i = arr.length-1; i>=0; i--){
+            while(!st.isEmpty() && arr[i] >= st.peek()){
+                st.pop();
+            }
+            if(st.isEmpty()){
+                res[i] = -1;
+            }
+            else{
+                res[i] = st.peek();
+            }
+            st.push(arr[i]);
+        }
+
+        return res;
+    }
+    
+    public static boolean isValidParentesis(String exp) {
+        Stack<Character> st = new Stack<Character>();
+        String map = ")]}";
+        for(char ch: exp.toCharArray()){
+            if(map.indexOf(ch) == -1){
+                st.push(ch);
+            } else{
+                if(st.isEmpty()){
+                    return false;
+                } if((st.peek() == '(' && ch == ')') || 
+                    (st.peek() == '[' && ch == ']') ||
+                    (st.peek().equals('{') && ch == '}')){
+                        st.pop();
+                } else{
+                    return false;
+                }
+            }
+        }
+        if(!st.isEmpty()){
+            return false;
+        }
+        return true;
+    }
+    
+    // implementing duplicate parenthises code
+    public static boolean hasDuplicateParentheses(String exp) {
+        Stack<Character> st = new Stack<>();
+        for (char ch : exp.toCharArray()) {
+            if (ch != ')') {
+                st.push(ch);
+            } else {
+                int count = 0;
+                while(st.peek() != '('){
+                    count++;
+                    st.pop();
+                }
+                if(count < 1){
+                    return true;
+                }
+                
+                st.pop(); // pop opening bracket
+            }
+        }
+
+        return false; // No duplicate parentheses found
+    } 
+    
     public static void main(String[] args) {
         // StackByArrayList st = new StackByArrayList();
         // st.push(1);
@@ -200,11 +268,23 @@ public class Stack_ {
         // reverseStack(st);
         // System.err.println(st);
         
-        int[] price = {100, 80, 60, 70, 60, 85, 100};
-        displayArray(price);
-        int[] span = stockSpan(price);
-        displayArray(span);
-        
+        // int[] price = {100, 80, 60, 70, 60, 85, 100};
+        // displayArray(price);
+        // int[] span = stockSpan(price);
+        // displayArray(span);
 
+
+        // int[] arr = {6, 8, 0, 1, 3};
+        // int[] NextGreater = NextGreaterElement(arr);
+        // displayArray(NextGreater);
+        
+        // String exp = "()[]{}(())";
+        // boolean res = isValidParentesis(exp);
+        // System.out.print(res);
+
+
+        String exp = "((a+b)+(c+d))";
+        boolean res = hasDuplicateParentheses(exp);
+        System.err.println(res);
     }
 }

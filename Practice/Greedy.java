@@ -36,11 +36,80 @@ public class Greedy{
         System.out.println();
         return maxCount;
     }
+
+    // fractional Knapsak Problem
+    public static int fractionalKnapsack(int[] values, int[] weights, int W){
+        int n = weights.length;
+        double[][] ratio = new double[n][2];
+        for(int i = 0; i<n; i++){
+            ratio[i][0] = i;
+            ratio[i][1] = values[i]/(double)weights[i];
+        }
+        Arrays.sort(ratio, Comparator.comparingDouble(a->a[1]));
+
+        int ans = 0;
+        int capacity = W;
+        for(int i = n-1; i>=0; i--){
+            int idx = (int) ratio[i][0];
+            if(capacity >= weights[idx]){
+                capacity -= weights[idx];
+                ans += values[idx];
+            } else{
+                ans += ratio[i][1] * capacity;
+                capacity = 0;
+                break;
+            }
+        }
+
+        return ans;
+    }
+    
+    public static int sumOfMaximumDifference(int[] A, int[] B){
+        Arrays.sort(A);
+        Arrays.sort(B);
+        int sumAbsDiff = 0;
+        for(int i=0; i<A.length; i++){
+            sumAbsDiff+=Math.abs(A[i]-B[i]);
+        }
+
+        return sumAbsDiff;
+    }
+
+    public static int longestChainPair(int[][] pairs){
+        Arrays.sort(pairs, Comparator.comparingDouble(o -> o[1]));
+        int count = 1;
+        int endPair = pairs[0][1];
+        System.err.print("Pairs = (" + pairs[0][0] + ", " +pairs[0][1] + ") ");
+        for(int i = 1; i<pairs.length; i++) {
+            int tempPair = pairs[i][0];
+            if(tempPair >= endPair){
+                count++;
+                endPair = pairs[i][1];
+                System.err.print("(" + pairs[i][0] + ", " + pairs[i][1] +") ");
+            }
+        }
+        System.err.println();
+        return count;
+    }
     public static void main(String[] args) {
         // System.out.println("Hello");
-        int[] start = {1, 3, 0, 5, 8, 5};
-        int[] end = {2, 4, 6, 7, 9, 9};
-        System.out.println("Max Activities = "+maxActivitySelection(start,end));
+        // int[] start = {1, 3, 0, 5, 8, 5};
+        // int[] end = {2, 4, 6, 7, 9, 9};
+        // System.out.println("Max Activities = "+maxActivitySelection(start,end));
+
+        // int[] values = {60, 100, 120};
+        // int[] weights= {10, 20, 30};
+        // int W = 50;
+        // System.out.println("Total Amount = " + fractionalKnapsack(values, weights, W));
+
+
+        // int[] A = {4, 1, 8, 7};
+        // int[] B = {2, 3, 6, 5};
+        // System.err.println("Sum of Absolute Difference = "+ sumOfMaximumDifference(A, B));
+
+
+        int[][] pairs = {{5, 24}, {39, 60}, {5, 28}, {27, 40}, {50, 90}};
+        System.err.println("Longest Chain Can Form = " + longestChainPair(pairs));
 
     }
 }

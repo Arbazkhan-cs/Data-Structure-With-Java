@@ -91,6 +91,75 @@ public class Greedy{
         System.err.println();
         return count;
     }
+
+    public static int indianCoins(int Value){
+        int[] notes = {2000, 500, 100, 50, 20, 10, 5, 2, 1};
+        int numNotes = 0;
+        int idx = 0;
+        while(Value > 0) {
+            while(idx<notes.length){
+                if(Value >= notes[idx]){
+                    numNotes++;
+                    Value -= notes[idx];
+                    System.err.print(notes[idx] + " ");
+                    break;
+                }
+                idx++;
+            }
+        }
+        System.err.println();
+
+        return numNotes;
+    }
+
+    public static int jobSequencingProblem(int[][] jobs){
+        Arrays.sort(jobs, Comparator.comparingDouble(o -> o[1])); // sort by profit
+        int maxJob = 1;
+        int startTime = jobs[0][0];
+        System.err.print("jobs done = (" + jobs[0][0] + ", " + jobs[0][1] + ") ");
+        for(int i=jobs.length-1; i>=0; i--){
+            if(jobs[i][0] > startTime){
+                maxJob++;
+                startTime = jobs[i][0];
+                System.err.print("(" + jobs[i][0] + ", " + jobs[i][1] + ") ");
+            }
+        }
+        System.err.println();
+        return maxJob;
+    }
+    public static int chocolaProblem(Integer[] verticalCost, Integer[] horizontalCost){
+        int m = verticalCost.length;
+        int n = horizontalCost.length;
+
+        Arrays.sort(verticalCost, Comparator.reverseOrder());
+        Arrays.sort(horizontalCost, Comparator.reverseOrder());
+
+        int hc = 0, vc = 0;
+        int hp = 1, vp = 1;
+        int totalCost = 0;
+        while(hc < n && vc < m) { // n = horizontal.length, m = vertical.length
+            if(verticalCost[vc] <= horizontalCost[hc]){ // horizontal cut
+                totalCost += horizontalCost[hc]*vp;
+                hp++;
+                hc++;
+            } else{ // vertical cut
+                totalCost += verticalCost[vc]*hp;
+                vp++;
+                vc++;
+            }
+        }
+        while(hc < n) {
+            totalCost += horizontalCost[hc]*vp;
+            hp++;
+            hc++;
+        }
+        while(vc < m){
+            totalCost += verticalCost[vc]*hp;
+            vp++;
+            vc++;
+        }
+        return totalCost;
+    }
     public static void main(String[] args) {
         // System.out.println("Hello");
         // int[] start = {1, 3, 0, 5, 8, 5};
@@ -108,8 +177,20 @@ public class Greedy{
         // System.err.println("Sum of Absolute Difference = "+ sumOfMaximumDifference(A, B));
 
 
-        int[][] pairs = {{5, 24}, {39, 60}, {5, 28}, {27, 40}, {50, 90}};
-        System.err.println("Longest Chain Can Form = " + longestChainPair(pairs));
+        // int[][] pairs = {{5, 24}, {39, 60}, {5, 28}, {27, 40}, {50, 90}};
+        // System.err.println("Longest Chain Can Form = " + longestChainPair(pairs));
 
+
+        // int price = 590;
+        // System.err.println("Total Notes Required: " + indianCoins(price));
+
+        // int[][] jobs = {{4, 20}, {1, 10}, {1, 40}, {1, 30}};
+        // System.err.println("Maximum job done = " + jobSequencingProblem(jobs));
+
+
+        Integer[] verticalCost = {2, 1, 3, 1, 4};
+        Integer[] horizontalCost = {4, 1, 2};
+
+        System.err.println("Total Cost = "+chocolaProblem(verticalCost, horizontalCost));
     }
 }

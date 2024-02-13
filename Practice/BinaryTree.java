@@ -102,12 +102,55 @@ public class BinaryTree{
 
             return sumLeft + sumRight + root.data;
         }
+        // ======= Diameter of the tree ==========================
+        public int heightForDiameter(Node root){
+            if(root == null){
+                return 0;
+            }
+            int leftHeight = heightForDiameter(root.leftChild);
+            int rightHeight = heightForDiameter(root.rightChild);
+
+            return Math.max(leftHeight, rightHeight) + 1;
+        }
+        public int calculateDiameter(Node root){
+            if(root == null){
+                return 0;
+            }
+            int leftDiameter = calculateDiameter(root.leftChild);
+            int leftHeight = heightForDiameter(root.leftChild);
+            int rightDiameter = calculateDiameter(root.rightChild);
+            int rightHeight = heightForDiameter(root.rightChild) ;
+
+            int selfDiameter = leftHeight + rightHeight + 1;
+            return Integer.max(selfDiameter, Integer.max(leftDiameter, rightDiameter));
+        }
+        static class Info{
+            int ht;
+            int dim;
+            public Info(int ht, int dim){
+                this.ht = ht;
+                this.dim = dim;
+            }
+        }
+        public Info calculateDiameter2(Node root){
+            if(root == null){
+                return new Info(0, 0);
+            }
+            
+            Info leftInfo = calculateDiameter2(root.leftChild);
+            Info rightInfo = calculateDiameter2(root.rightChild);
+
+            int dim = Math.max(Math.max(leftInfo.dim, rightInfo.dim), leftInfo.ht + rightInfo.ht + 1);
+            int ht = Math.max(leftInfo.ht, rightInfo.ht)+1;
+
+            return new Info(ht, dim);
+        }
     }
     
     public static void main(String[] args) {
         System.out.println("Hello World");
 
-        int[] nodes = {1, 2, 4, -1, -1, 5, -1, -1, 3, -1, 6, -1, -1};
+        int[] nodes = {1, 2, 4, -1, -1, 5, -1, -1, 3, -1, 6,-1, 7, -1, -1};
         binaryTree tree = new binaryTree();
         Node root = tree.buildTreePreorder(nodes);
         System.err.print("Preorder = [ ");
@@ -129,6 +172,8 @@ public class BinaryTree{
         System.err.println("Height of the tree = "+ tree.heightOfTree(root));
         System.err.println("Number of nodes = "+ tree.countNodes(root));
         System.err.println("Sum of nodes = "+ tree.sumOfNodes(root));
+        System.out.println("Diameter of the tree (Approach-1) = "+ tree.calculateDiameter(root));
+        System.out.println("Diameter of the tree (Approach-2) = "+ tree.calculateDiameter2(root).dim);
 
     }
 }

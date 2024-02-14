@@ -1,6 +1,6 @@
 import java.util.*;
 import java.util.LinkedList;
-public class basics {
+public class BinaryTreePart1 {
     static class Node{
         int data;
         Node leftChild;

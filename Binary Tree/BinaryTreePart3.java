@@ -85,6 +85,57 @@ public class BinaryTreePart3{
             printKthLevel(root.leftChild, k-1);
             printKthLevel(root.rightChild, k-1);
         }
+        public boolean getPath(Node root, Node node, ArrayList<Node> arr){
+            if(root == null){
+                return false;
+            }
+            if(root.data == node.data){
+                return true;
+            }
+
+            boolean path1 = getPath(root.leftChild, node, arr);
+            boolean path2 = getPath(root.rightChild, node, arr);
+            if(path1 || path2){
+                arr.add(root);
+                return true;
+            }else{
+                return false;
+            }
+        }
+        public Node LowestComanAncester(Node root, Node n1, Node n2) {
+            ArrayList<Node> arr1 = new ArrayList<Node>();
+            ArrayList<Node> arr2 = new ArrayList<Node>();
+            getPath(root, n1, arr1);
+            getPath(root, n2, arr2);
+            int l = 0, r = 0;
+            while (l < arr1.size() && r < arr2.size()) {
+                if(arr1.get(l) == arr2.get(r)){
+                    return arr1.get(l);
+                }
+                l++;
+                r++;
+            }
+
+            return new Node(-1);
+        }
+
+        public Node LowestComanAncesterApproac2(Node root, Node n1, Node n2) {
+            if(root == null || root.data == n1.data || root.data == n2.data){
+                return root;
+            }
+            Node leftAncester = LowestComanAncesterApproac2(root.leftChild, n1, n2);
+            Node rightAncester = LowestComanAncesterApproac2(root.rightChild, n1, n2);
+
+            // left but not right
+            if(rightAncester == null){
+                return leftAncester;
+            } // right but not left
+            if(leftAncester == null){
+                return rightAncester;
+            }
+            
+            return root;
+        }
     }
 
     public static void main(String[] args) {
@@ -100,5 +151,8 @@ public class BinaryTreePart3{
         System.err.println("\nprint kth level by iterator: ");
         tree.printKthLevel(root, 3);
 
+
+        Node lca = tree.LowestComanAncesterApproac2(root, new Node(4), new Node(5));
+        System.err.println("LCA = "+lca.data);
     }
 }

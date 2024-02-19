@@ -1,6 +1,8 @@
 import java.util.*;
 import java.util.LinkedList;
 
+import org.w3c.dom.Node;
+
 public class BinaryTreePart3{
     static class Node{
         int data;
@@ -136,11 +138,58 @@ public class BinaryTreePart3{
             
             return root;
         }
+        // =========================== Distance Between Two Nodes ========================================
+        public int DistanceBtwAncestorAndNodeN(Node root, Node n){
+            if (root == null) {
+                return -1;
+            }
+            if (root.data == n.data) {
+                return 0;
+            }
+            int ld = DistanceBtwAncestorAndNodeN(root.leftChild, n);
+            int rd = DistanceBtwAncestorAndNodeN(root.rightChild, n);
+
+            if (ld == -1 && rd == -1) {
+                return -1; // Node not found in either subtree
+            } else if (ld == -1) {
+                return rd + 1; // Node found in the right subtree
+            } else {
+                return ld + 1; // Node found in the left subtree
+            }
+        }
+        public Node findLCA(Node root, Node n1, Node n2) {
+            if(root == null || root.data == n1.data || root.data == n2.data){
+                return root;
+            }
+
+            Node leftAncestor = findLCA(root.leftChild, n1, n2);
+            Node rightAncestor = findLCA(root.rightChild, n1, n2);
+
+            if(leftAncestor != null && rightAncestor != null){
+                return root;
+            }
+
+            return (leftAncestor != null) ? leftAncestor : rightAncestor;
+        }
+        public int minDistBtwNodes(Node root, Node n1, Node n2) {
+            Node ancestor = findLCA(root, n1, n2);
+            return DistanceBtwAncestorAndNodeN(ancestor, n1) + DistanceBtwAncestorAndNodeN(ancestor, n2);
+        }
     }
 
     public static void main(String[] args) {
         BinaryTree tree = new BinaryTree();
         int[] nodes = {1, 2, 4, -1, -1, 5, -1, -1, 3, 6, -1, -1, 7, -1, -1};
+        /* 
+                        1
+                      /  \
+                     /    \
+                    /      \
+                   2        3
+                  / \      / \
+                 /   \    /   \
+                4     5  6     7
+        */
 
         Node root = tree.buildPreorderTree(nodes);
         tree.printPreorder(root);
@@ -154,5 +203,7 @@ public class BinaryTreePart3{
 
         Node lca = tree.LowestComanAncesterApproac2(root, new Node(4), new Node(5));
         System.err.println("LCA = "+lca.data);
+
+        System.out.println("Minimum Difference = "+tree.minDistBtwNodes(root, new Node(4), new Node(6)));
     }
 }

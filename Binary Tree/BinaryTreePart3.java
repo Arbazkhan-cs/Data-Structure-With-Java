@@ -175,7 +175,48 @@ public class BinaryTreePart3{
             Node ancestor = findLCA(root, n1, n2);
             return DistanceBtwAncestorAndNodeN(ancestor, n1) + DistanceBtwAncestorAndNodeN(ancestor, n2);
         }
+
+        public int KthAncester(Node root, int n, int k){
+            if(root == null){
+                return -1;
+            }
+            if(root.data == n){
+                return 0;
+            }
+
+            int leftDist = KthAncester(root.leftChild, n, k);
+            int rightDist = KthAncester(root.rightChild, n, k);
+
+            if(leftDist == -1 && rightDist == -1){
+                return -1;
+            }
+            
+            int maxDist = Math.max(leftDist, rightDist);
+
+            if(maxDist+1 == k){
+                System.out.println("K-th Ancestor is " + root.data);
+            }
+
+            return maxDist+1;
+        }
+
+        public int toSumTree(Node root){
+            if(root == null){
+                return 0;
+            }
+            int leftSum = toSumTree(root.leftChild);
+            int rightSum = toSumTree(root.rightChild);
+            int data = root.data;
+            if(root.leftChild == null || root.rightChild == null){
+                root.data =  leftSum + rightSum;
+            } else{
+                root.data = root.leftChild.data + leftSum + root.rightChild.data + rightSum;
+            }
+
+            return data;
+        }
     }
+
 
     public static void main(String[] args) {
         BinaryTree tree = new BinaryTree();
@@ -205,5 +246,8 @@ public class BinaryTreePart3{
         System.err.println("LCA = "+lca.data);
 
         System.out.println("Minimum Difference = "+tree.minDistBtwNodes(root, new Node(4), new Node(6)));
+        tree.KthAncester(root, 5, 1);
+        tree.toSumTree(root);
+        tree.printPreorder(root);
     }
 }

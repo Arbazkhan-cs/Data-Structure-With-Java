@@ -1,5 +1,5 @@
 import org.w3c.dom.Node;
-
+import java.util.*;
 public class bstPart1 {
     public static class Node{
         int data;
@@ -82,12 +82,54 @@ public class bstPart1 {
                 root = root.leftChild;
             }
             return root;
-        }        
+        }     
+        
+        public void printInRange(Node root, int k1, int k2){
+            if(root == null){
+                return;
+            }
+            // case 1
+            if(root.data >= k1 && root.data <= k2){
+                printInRange(root.leftChild, k1, k2);
+                System.out.print(root.data + " ");
+                printInRange(root.rightChild, k1, k2);
+            }
+            // case 2
+            else if(root.data < k1){
+                printInRange(root.leftChild, k1, k2);
+            } else{
+                printInRange(root.rightChild, k1, k2);
+            }
+        }
+
+        public void printRootToLeaf(Node root, ArrayList<Integer> paths){
+            if(root == null){
+                return;
+            }
+            paths.add(root.data);
+            if(root.leftChild == null && root.rightChild == null){
+                System.out.println("Path: " + paths);
+            }
+            printRootToLeaf(root.leftChild, paths);
+            printRootToLeaf(root.rightChild, paths);
+            paths.remove(paths.size()-1);
+        }
+        public boolean isValidBST(Node root, Integer min, Integer max){
+            if(root == null){
+                return true;
+            }
+            if((min != null && root.data <= min) || (max != null && root.data>=max)){
+                return false;
+            }
+
+            return isValidBST(root.leftChild, min, root.data) && 
+                            isValidBST(root.rightChild, root.data, max);
+        }
     }
     public static void main(String[] args) {
         BST tree = new BST();
         Node root = null;
-        int[] values = {8, 5, 3, 1, 4, 6, 10, 11, 14};
+        int[] values = {8, 5, 3, 6, 10, 11, 14};
         for(int val: values){
             root = tree.insert(root, val);
         }
@@ -102,15 +144,22 @@ public class bstPart1 {
         // tree.printInorder(root);
         
         // case 1 or 2
-        root = tree.deleteNode(root, 14);
-        System.err.print("Root = ");
-        tree.printInorder(root);
-        System.err.println();
+        // root = tree.deleteNode(root, 14);
+        // System.err.print("Root = ");
+        // tree.printInorder(root);
+        // System.err.println();
 
-        // case 3
-        root = tree.deleteNode(root, 5);
-        System.err.print("Root = ");
-        tree.printInorder(root);
-        System.err.println();
+        // // case 3
+        // root = tree.deleteNode(root, 5);
+        // System.err.print("Root = ");
+        // tree.printInorder(root);
+        // System.err.println();
+
+        tree.printInRange(root, 5, 11);
+
+        System.out.println("\nPath from root to leafes are: ");
+        tree.printRootToLeaf(root, new ArrayList<Integer>());
+
+        System.out.println("Is Valid BST: "+ tree.isValidBST(root, null, null));
     }
 }
